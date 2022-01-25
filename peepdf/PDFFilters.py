@@ -75,6 +75,7 @@ def decodeStream(stream, filter, parameters={}):
         @param parameters: List of PDFObjects containing the parameters for the filter
         @return: A tuple (status,statusContent), where statusContent is the decoded stream in case status = 0 or an error in case status = -1
     '''
+    #filter = '/CCF'
     if filter == '/ASCIIHexDecode' or filter == '/AHx':
         ret = asciiHexDecode(stream)
     elif filter == '/ASCII85Decode' or filter == '/A85':
@@ -97,6 +98,12 @@ def decodeStream(stream, filter, parameters={}):
         ret = crypt(stream, parameters)
     else:
         ret = (-1, 'Unknown filter "%s"' % filter)
+    print(filter)
+    print(ret)
+    if ret[0] == -1:
+        ret = ccittFaxDecode(stream, parameters)
+    print(filter)
+    print(ret)
     return ret
 
 
@@ -272,7 +279,7 @@ def flateDecode(stream, parameters):
         else:
             decodedStream = zlib.decompress(stream)
     except Exception as a:
-        return (-1, 'Error decompressing string')
+        return (-1, 'Error flateDecode stream')
 
     if parameters is None or parameters == {}:
         return (0, decodedStream)
@@ -367,7 +374,7 @@ def lzwDecode(stream, parameters):
     try:
         decodedStream = peepdf.lzw.lzwdecode(stream)
     except:
-        return (-1, 'Error decompressing string')
+        return (-1, 'Error lzw decompressing string')
 
     if parameters is None or parameters == {}:
         return (0, decodedStream)
@@ -455,7 +462,7 @@ def lzwEncode(stream, parameters):
                 encodedStream += c
             return (0, encodedStream)
         except:
-            return (-1, 'Error decompressing string')
+            return (-1, 'Error lzw compressing string')
 
 
 def pre_prediction(stream, predictor, columns, colors, bits):
@@ -656,7 +663,7 @@ def ccittFaxDecode(stream, parameters):
             decodedStream = CCITTFax().decode(stream)
             return (0, decodedStream)
         except:
-            return (-1, 'Error decompressing string')
+            return (-1, 'Error ccitt decompressing string')
     else:
         # K = A code identifying the encoding scheme used
         if "/K" in parameters:
@@ -729,7 +736,7 @@ def ccittFaxDecode(stream, parameters):
                                               damagedRowsBeforeError)
             return (0, decodedStream)
         except:
-            return (-1, 'Error decompressing string')
+            return (-1, 'Error ccitt decompressing string')
 
 
 def ccittFaxEncode(stream, parameters):
@@ -803,7 +810,7 @@ def dctDecode(stream, parameters):
         decodedStream = im.tostring()
         return (0, decodedStream)
     except:
-        return (-1, 'Error decompresing image data')
+        return (-1, 'Error dct decompresing image data')
 
 
 def dctEncode(stream, parameters):

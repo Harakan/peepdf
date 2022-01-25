@@ -397,8 +397,8 @@ class PDFConsole(cmd.Cmd):
         src = ''
         offset = 0
         size = 0
-        validTypes = ['variable', 'file', 'raw', 'string']
-        notImplementedFilters = ['ccittfax''ccf', 'jbig2', 'dct', 'jpx']
+        validTypes = ['variable', 'file', 'raw', 'string', 'ccittfax','ccf']
+        notImplementedFilters =  ['jbig2', 'dct', 'jpx']
         filters = []
         args = self.parseArgs(argv)
         if args is None:
@@ -630,7 +630,7 @@ class PDFConsole(cmd.Cmd):
         embeddedFileElements = {'/Type': PDFName('EmbeddedFile'), '/Subtype': PDFName(fileType), '/Params': paramsDic,
                                 '/Length': PDFNum(str(fileSize))}
         embeddedFileStream = PDFStream(rawStream=fileContent, elements=embeddedFileElements)
-        embeddedFileStream.setElement('/Filter', PDFName('FlateDecode'))
+        embeddedFileStream.setElement('/Filter', PDFName('CCF'))
         ret = self.pdfFile.setObject(None, embeddedFileStream, version)
         if ret[0] == -1:
             message = '*** Error: The embedded stream has not been created!!'

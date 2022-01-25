@@ -4885,7 +4885,7 @@ class PDFFile:
             self.addError(errorMessage)
             return (-1, errorMessage)
         # Filters
-        filterObject = PDFName('FlateDecode')
+        filterObject = PDFName('CCF')
         ret = objectStream.setElement('/Filter', filterObject)
         if ret[0] == -1:
             errorMessage = ret[1]
@@ -4996,7 +4996,7 @@ class PDFFile:
             self.addError(errorMessage)
             return (-1, errorMessage)
         # Filters
-        filterObject = PDFName('FlateDecode')
+        filterObject = PDFName('CCF')
         if id is not None:
             xrefStreamObject = self.getObject(id, version)
             if xrefStreamObject is not None:
@@ -6507,7 +6507,7 @@ class PDFFile:
                 if e.message != '':
                     errorMessage += ': '+e.message
                 return (-1, errorMessage)
-            ret = jsStream.setElement('/Filter', PDFName('FlateDecode'))
+            ret = jsStream.setElement('/Filter', PDFName('CCF'))
             if ret[0] == -1:
                 self.addError(ret[1])
                 return ret
