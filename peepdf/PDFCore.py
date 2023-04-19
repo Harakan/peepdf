@@ -5721,6 +5721,10 @@ class PDFFile:
             creationDate = infoObject.getElementByName('/CreationDate')
             if creationDate is not None and creationDate != []:
                 basicMetadata['creation'] = creationDate.getValue()
+            
+            modDate = infoObject.getElementByName('/ModDate')
+            if modDate is not None and modDate != []:
+                basicMetadata['modification'] = modDate.getValue()
 
         if "author" not in basicMetadata:
             ids = self.getObjectsByString('<dc:creator>', version)
