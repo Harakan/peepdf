@@ -6709,9 +6709,10 @@ class PDFFile:
                 prevXrefSectionOffset = lastXrefSectionOffset
                 self.body[v].setObjects(indirectObjects)
                 offset = len(outputFileContent)
-            open(filename, 'wb').write(outputFileContent)
-            self.setMD5(hashlib.md5(outputFileContent).hexdigest())
-            self.setSize(len(outputFileContent))
+            encodedFileContent = outputFileContent.encode("utf-8")
+            open(filename, 'wb').write(encodedFileContent)
+            self.setMD5(hashlib.md5(encodedFileContent).hexdigest())
+            self.setSize(len(encodedFileContent))
             self.path = os.path.realpath(filename)
             self.fileName = filename
         except:
